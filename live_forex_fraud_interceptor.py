@@ -1,27 +1,33 @@
-print("--- API Challenge 2 Initialized: Live Forex Gateway 🌐 ---")
+import streamlit as st
+import random
+import string
 
-def process_live_forex_stream(api_rate_payload, transfer_amount_usd):
-    print(f"Consuming live exchange rate for pair: {api_rate_payload.get('currency_pair')}")
-    
-    conversion_rate = api_rate_payload.get('rate', 83.0)
-    converted_inr = transfer_amount_usd * conversion_rate
-    
-    try:
-        if transfer_amount_usd > 100000.0:
-            if converted_inr > 8500000.0:
-                print("API Compliance Log: Massive high-value institutional wire detected.")
-                return "mandatory RBI compliance clearance and source audit"
-            else:
-                print("API Notice: Large transfer within approved exchange margins.")
-                return "institutional tier clearing authorized"
-        else:
-            print("API Status: Transfer amount within standard retail limits.")
-            return "standard cross-border payout approved"
-            
-    except TypeError:
-        print("API Error: Invalid data format in live rate stream.")
-        return "forex API data type error handled"
+st.title("🔐 Rabia's Elite Password Security Tool")
+st.write("Welcome! Evaluate your password strength and generate secure keys instantly.")
 
-mock_forex_data = {"currency_pair": "USD/INR", "rate": 83.5}
-print("\nRunning API Test 2:")
-print(process_live_forex_stream(mock_forex_data, 150000.0))
+user_pwd = st.text_input("Enter a password to test strength:", type="password")
+
+if user_pwd:
+    length = len(user_pwd) >= 8
+    digit = any(char.isdigit() for char in user_pwd)
+    upper = any(char.isupper() for char in user_pwd)
+    special = any(char in string.punctuation for char in user_pwd)
+    
+    score = sum([length, digit, upper, special])
+    
+    st.markdown("---")
+    st.write(f"**Password Evaluated:** {user_pwd}")
+    
+    if score == 4:
+        st.success("Strength Rating: 🛡️ STRONG (Elite Security)")
+    elif score >= 2:
+        st.warning("Strength Rating: ⚠️ MODERATE (Needs Improvement)")
+    else:
+        st.error("Strength Rating: ❌ WEAK (Vulnerable)")
+    st.markdown("---")
+
+st.subheader("Generate a Secure Password")
+if st.button("Generate Secure Password"):
+    chars = string.ascii_letters + string.digits + string.punctuation
+    secure_pwd = "".join(random.choice(chars) for _ in range(12))
+    st.info(f"Generated Secure PWD: `{secure_pwd}`")
